@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        text-align: center;
+        background-color: #3e57c7;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      #startGame {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 150px;
+        height: 50px;
+        font-size: 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+      }
+
+      #gameArea {
+        display: flex;
+        justify-content: center;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 100px);
+        grid-gap: 10px;
+      }
+
+      .cell {
+        width: 100px;
+        height: 100px;
+        background-color: #000000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .mole {
+        background-color: rgb(255, 0, 0);
+      }
+
+      #score {
+        text-shadow: 2px 2px 2px rgb(0, 0, 0);
+        color: rgb(255, 255, 255);
+        padding: 10px;
+        position: fixed;
+        bottom: 10px;
+        left: 47%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+        transition: background-color 0.3s ease-in-out;
+        font-size: 23px;
+      }
+
+      h1 {
+        color: white;
+        text-shadow: 2px 2px 4px rgb(0, 0, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Whack-A-Mole Game</h1>
+    <button id="startGame">Start Game</button>
+    <div id="gameArea">
+      <div class="grid">
+        <!-- Moles will appear in these cells -->
+      </div>
+    </div>
+    <div id="score">Score: 0</div>
+
+    <script>
+      const grid = document.querySelector(".grid");
+      const scoreDisplay = document.getElementById("score");
+      let score = 0;
+      let currentMoleCell;
+      let moleTimer;
+
+      document.getElementById("startGame").addEventListener("click", startGame);
+
+      function startGame() {
+        score = 0;
+        scoreDisplay.textContent = "Score: 0";
+        grid.innerHTML = "";
+
+        for (let i = 0; i < 16; i++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+          grid.appendChild(cell);
+        }
+
+        moleTimer = setInterval(randomMole, 450);
+        setTimeout(() => {
+          clearInterval(moleTimer);
+          alert("Time's up! Your final score is: " + score);
+          scoreDisplay.textContent = "Score: " + 0;
+        }, 30000);
+      }
+
+      function randomMole() {
+        if (currentMoleCell) {
+          currentMoleCell.classList.remove("mole");
+        }
+        const cells = document.querySelectorAll(".cell");
+        const randomIndex = Math.floor(Math.random() * cells.length);
+        currentMoleCell = cells[randomIndex];
+        currentMoleCell.classList.add("mole");
+        currentMoleCell.addEventListener("click", whackMole);
+      }
+      function whackMole() {
+        score++;
+        scoreDisplay.textContent = "Score: " + score;
+        currentMoleCell.classList.remove("mole");
+        currentMoleCell.removeEventListener("click", whackMole);
+      }
+    </script>
+  </body>
+</html>
